@@ -1,123 +1,89 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import CssBaseline from '@mui/material/CssBaseline';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
-import FormControl from '@mui/material/FormControl';
-import Link from '@mui/material/Link';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
-import { styled } from '@mui/material/styles';
-import axios from 'axios';
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useContext, useEffect } from "react";
+
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  TextField,
+  Typography,
+  Card,
+} from "@mui/material";
+import { useAuth } from "@/context/AuthContext";
 
 const schema = z.object({
-    email: z.string().email('Invalid email address'),
-    password: z.string().min(1, 'Password is required'),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters long"),
 });
 
-const Card = styled(MuiCard)(({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    alignSelf: 'center',
-    width: '100%',
-    padding: theme.spacing(4),
-    gap: theme.spacing(2),
-    margin: 'auto',
-    [theme.breakpoints.up('sm')]: {
-        maxWidth: '450px',
-    },
-    boxShadow:
-        'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-}));
-
-const SignInContainer = styled(Stack)(({ theme }) => ({
-    height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
-    minHeight: '100%',
-    padding: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-        padding: theme.spacing(4),
-    },
-}));
+type FormData = z.infer<typeof schema>;
 
 export default function SignIn() {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm({ resolver: zodResolver(schema) });
+  const { login, user } = useAuth();
+  const router = useRouter();
+  useEffect(() => {
+    if (user) {
+      router.push("/dashboard");
+    }
+  }, [router, user]);
 
-    const onSubmit =async (data:{email:string,password:string}) => {
-        try {
-            const response = await axios.post('https://dummy-1.hiublue.com/api/login', data);
-            console.log('Login Success:', response.data);
-        } catch (error) {
-            console.error('Login Failed:', error);
-        }
-    };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-    return (
-        <>
-            <CssBaseline enableColorScheme />
-            <SignInContainer direction="column" justifyContent="center">
-                <Card variant="outlined">
-                    <Typography component="h1" variant="h4" sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}>
-                        Sign in
-                    </Typography>
-                    <Box
-                        component="form"
-                        onSubmit={handleSubmit(onSubmit)}
-                        noValidate
-                        sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}
-                    >
-                        <FormControl>
-                            <FormLabel htmlFor="email">Email</FormLabel>
-                            <TextField
-                                type="email"
-                                {...register('email')}
-                                placeholder="your@email.com"
-                                autoComplete="email"
-                                fullWidth
-                                variant="outlined"
-                                size="small"
-                                error={!!errors.email}
-                                helperText={typeof errors.email?.message === "string" ? errors.email.message : undefined}
-                                sx={{ mt: 1 }}
-                            />
-                        </FormControl>
-                        <FormControl>
-                            <FormLabel htmlFor="password">Password</FormLabel>
-                            <TextField
-                                type="password"
-                                {...register('password')}
-                                placeholder="••••••"
-                                autoComplete="current-password"
-                                fullWidth
-                                variant="outlined"
-                                size="small"
-                                error={!!errors.password}
-                                helperText={typeof errors.password?.message === "string" ? errors.password.message : undefined}
-                                sx={{ mt: 1 }}
-                            />
-                        </FormControl>
-                        <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-                        <Button type="submit" fullWidth variant="contained">
-                            Sign in
-                        </Button>
-                        <Link component="button" type="button" variant="body2" sx={{ alignSelf: 'center' }}>
-                            Forgot your password?
-                        </Link>
-                    </Box>
-                </Card>
-            </SignInContainer>
-        </>
-    );
+  const onSubmit = async (data: FormData) => {
+    try {
+      const response = await axios.post(
+        "https://dummy-1.hiublue.com/api/login",
+        data
+      );
+      login({ user: response.data.user, token: response.data.token });
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Login Failed:", error);
+    }
+  };
+  return (
+    <Card sx={{ maxWidth: 400, padding: 3, margin: "auto", marginTop: 5 }}>
+      <Typography variant="h4">Sign In</Typography>
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+      >
+        <FormControl>
+          <FormLabel>Email</FormLabel>
+          <TextField
+            type="email"
+            {...register("email")}
+            fullWidth
+            error={!!errors.email}
+            helperText={errors.email?.message}
+          />
+        </FormControl>
+        <FormControl>
+          <FormLabel>Password</FormLabel>
+          <TextField
+            type="password"
+            {...register("password")}
+            fullWidth
+            error={!!errors.password}
+            helperText={errors.password?.message}
+          />
+        </FormControl>
+        <Button type="submit" variant="contained">
+          Sign in
+        </Button>
+      </Box>
+    </Card>
+  );
 }

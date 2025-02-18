@@ -1,10 +1,16 @@
-import DashboardView from "@/sections/dashboard/views/dashboard-view";
+'use client';
 
-export const metadata = {
-    title: 'Dashbord',
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+const Page = () => {
+    const router = useRouter();
+
+    useEffect(() => {
+        router.replace('/dashboard');
+    }, [router]);
+
+    return null;
 };
 
-
-export default function Page() {
-    return <DashboardView/>;
-}
+export default Page;

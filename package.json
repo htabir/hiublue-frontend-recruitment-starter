@@ -11,10 +11,11 @@
   },
   "dependencies": {
     "@emotion/cache": "latest",
-    "@emotion/react": "latest",
-    "@emotion/styled": "latest",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@hookform/resolvers": "^4.1.0",
     "@iconify/react": "^5.2.0",
+    "@mui/icons-material": "^6.4.4",
     "@mui/material": "^6.4.4",
     "@mui/material-nextjs": "next",
     "axios": "^1.7.9",
