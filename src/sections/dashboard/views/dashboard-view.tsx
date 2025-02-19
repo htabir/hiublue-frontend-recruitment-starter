@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import {
@@ -58,7 +58,7 @@ export default function DashboardView() {
       acc[user.status] = (acc[user.status] || 0) + 1;
       return acc;
     },
-    {} as Record<string, number>
+    {} as Record<string, number>,
   );
 
   const chartOptions = {
@@ -145,7 +145,12 @@ export default function DashboardView() {
           <Typography variant="h6" sx={{ mb: 2 }}>
             User Status Overview
           </Typography>
-          <Chart options={chartOptions} series={chartSeries} type="donut" height={300} />
+          <Chart
+            options={chartOptions}
+            series={chartSeries}
+            type="donut"
+            height={300}
+          />
         </Grid>
       </Grid>
     </Container>

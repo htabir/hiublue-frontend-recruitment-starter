@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react';
 import { Typography, Button, Box } from '@mui/material';
@@ -7,13 +7,20 @@ interface ErrorBoundaryState {
   hasError: boolean;
 }
 
-export class ErrorBoundary extends React.Component<React.PropsWithChildren<{}>, ErrorBoundaryState> {
-  constructor(props: {}) {
+interface ErrorBoundaryProps {
+  children: React.ReactNode;
+}
+
+export class ErrorBoundary extends React.Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(_: Error): ErrorBoundaryState {
+  static getDerivedStateFromError(__: Error): ErrorBoundaryState {
     return { hasError: true };
   }
 
@@ -33,7 +40,12 @@ export class ErrorBoundary extends React.Component<React.PropsWithChildren<{}>, 
           <Typography variant="h4" color="error">
             Something went wrong.
           </Typography>
-          <Button variant="contained" color="primary" onClick={this.handleReload} sx={{ mt: 3 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={this.handleReload}
+            sx={{ mt: 3 }}
+          >
             Reload Page
           </Button>
         </Box>

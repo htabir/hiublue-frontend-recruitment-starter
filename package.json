@@ -2,13 +2,15 @@
   "name": "hiublue-frontend-recruitment",
   "version": "0.0.1",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "post-update": "echo \"codesandbox preview only, need an update\" && pnpm update --latest",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": "echo \"No tests specified\" && exit 0"
   },
   "dependencies": {
     "@emotion/cache": "latest",
@@ -21,8 +23,9 @@
     "@mui/material-nextjs": "next",
     "apexcharts": "^4.4.0",
     "axios": "^1.7.9",
-    "eslint-config-prettier": "^10.0.1",
+    "eslint": "^8.57.1",
     "husky": "^9.1.7",
+    "js-cookie": "^3.0.5",
     "lint-staged": "^15.4.3",
     "lodash": "^4.17.21",
     "next": "^15.0.0",
@@ -35,13 +38,23 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@eslint/js": "^9.20.0",
+    "@types/js-cookie": "^3.0.6",
     "@types/lodash": "^4.17.15",
     "@types/node": "latest",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "eslint": "^9.20.1",
     "eslint-config-next": "^15.0.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-next": "^0.0.0",
     "husky": "^8.0.0",
-    "typescript": "latest"
+    "typescript": "latest",
+    "typescript-eslint": "^8.24.1"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }

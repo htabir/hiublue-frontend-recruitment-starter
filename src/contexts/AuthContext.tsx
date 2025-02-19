@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 interface User {
   id: string;
@@ -24,7 +25,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    const savedToken = localStorage.getItem('token');
+    const savedToken = Cookies.get('token'); // Use cookies instead of localStorage
     const savedUser = localStorage.getItem('user');
     if (savedToken && savedUser) {
       setToken(savedToken);
@@ -35,13 +36,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = (newToken: string, userInfo: User) => {
     localStorage.setItem('token', newToken);
     localStorage.setItem('user', JSON.stringify(userInfo));
+
+    Cookies.set('token', newToken, { expires: 7 }); // Set token in cookies for 7 days
     setToken(newToken);
     setUser(userInfo);
+    router.push('/');
   };
 
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    Cookies.remove('token'); // Remove from cookies too
+
     setToken(null);
     setUser(null);
     router.push('/login');

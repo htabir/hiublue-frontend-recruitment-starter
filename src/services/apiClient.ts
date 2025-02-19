@@ -3,7 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import toast from 'react-hot-toast';
 
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://dummy-1.hiublue.com',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://dummy-1.hiublue.com/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -20,7 +20,7 @@ apiClient.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // Response Interceptor: Handle Global Errors
@@ -36,7 +36,7 @@ apiClient.interceptors.response.use(
       toast.error(error.response?.data?.message || 'Something went wrong.');
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default apiClient;

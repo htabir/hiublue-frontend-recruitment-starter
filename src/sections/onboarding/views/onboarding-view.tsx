@@ -1,5 +1,5 @@
 // src/app/onboarding/page.tsx
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -45,9 +45,10 @@ export default function OnboardingPage() {
 
   const [userOptions, setUserOptions] = useState<UserOption[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(
-    null
-  );
+  const [message, setMessage] = useState<{
+    type: 'success' | 'error';
+    text: string;
+  } | null>(null);
 
   const handleUserSearch = async (query: string) => {
     if (!query) return;
@@ -65,11 +66,15 @@ export default function OnboardingPage() {
   const onSubmit = async (data: OnboardingFormValues) => {
     try {
       await sendOnboardingOffer(data);
-      setMessage({ type: 'success', text: 'Onboarding offer sent successfully!' });
+      setMessage({
+        type: 'success',
+        text: 'Onboarding offer sent successfully!',
+      });
     } catch (error: any) {
       setMessage({
         type: 'error',
-        text: error.response?.data?.message || 'Failed to send onboarding offer.',
+        text:
+          error.response?.data?.message || 'Failed to send onboarding offer.',
       });
     }
   };
@@ -86,7 +91,12 @@ export default function OnboardingPage() {
         </Alert>
       )}
 
-      <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 3 }}>
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        sx={{ mt: 3 }}
+      >
         {/* User Autocomplete */}
         <Autocomplete
           options={userOptions}

@@ -17,7 +17,6 @@ import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -73,12 +72,11 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 export default function SignIn() {
   const { login: authLogin } = useAuth();
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
@@ -86,12 +84,11 @@ export default function SignIn() {
   const onSubmit = async (data: LoginFormValues) => {
     try {
       const response = await login(data);
-      authLogin(response.token);
-      router.push('/dashboard');
+      console.log({ response });
+      authLogin(response.token, response.user);
+      router.push('/');
     } catch (error: any) {
-      setError(
-        error.response?.data?.message || 'Login failed. Please try again.',
-      );
+      console.log({ error });
     }
   };
 
@@ -156,11 +153,7 @@ export default function SignIn() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-            >
+            <Button type="submit" fullWidth variant="contained">
               Sign in
             </Button>
             <Link
