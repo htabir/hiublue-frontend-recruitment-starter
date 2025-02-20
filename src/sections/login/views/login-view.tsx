@@ -1,6 +1,8 @@
 'use client';
 
 import * as React from 'react';
+import { useState } from 'react';
+import { useAuth } from '@/auth/auth-context';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
@@ -57,88 +59,129 @@ const SignInContainer = styled(Stack)(({theme}) => ({
     },
 }));
 
-export default function SignIn() {
+interface LoginResponse {
+  token: string;
+}
 
-    return (
-        <>
-            <CssBaseline enableColorScheme/>
-            <SignInContainer direction="column" justifyContent="space-between">
-                <Card variant="outlined">
-                    <Typography
-                        component="h1"
-                        variant="h4"
-                        sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)'}}
-                    >
-                        Sign in
-                    </Typography>
-                    <Box
-                        component="form"
-                        onSubmit={() => {
-                        }}
-                        noValidate
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            width: '100%',
-                            gap: 2,
-                        }}
-                    >
-                        <FormControl>
-                            <FormLabel htmlFor="email">Email</FormLabel>
-                            <TextField
-                                type="email"
-                                name="email"
-                                placeholder="your@email.com"
-                                autoComplete="email"
-                                autoFocus
-                                required
-                                fullWidth
-                                variant="outlined"
-                                size="small"
-                                sx={{mt: 1}}
-                            />
-                        </FormControl>
-                        <FormControl>
-                            <FormLabel htmlFor="password">Password</FormLabel>
-                            <TextField
-                                name="password"
-                                placeholder="••••••"
-                                type="password"
-                                id="password"
-                                autoComplete="current-password"
-                                required
-                                fullWidth
-                                variant="outlined"
-                                size="small"
-                                sx={{mt: 1}}
-                            />
-                        </FormControl>
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary"/>}
-                            label="Remember me"
-                        />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            onClick={() => {
-                            }}
-                        >
-                            Sign in
-                        </Button>
-                        <Link
-                            component="button"
-                            type="button"
-                            onClick={() => {
-                            }}
-                            variant="body2"
-                            sx={{alignSelf: 'center'}}
-                        >
-                            Forgot your password?
-                        </Link>
-                    </Box>
-                </Card>
-            </SignInContainer>
-        </>
-    );
+export default function SignIn() {
+  const { login } = useAuth();
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError('');
+    setLoading(true);
+
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
+    try {
+      const response = await fetch('https://dummy-1.hiublue.com/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Invalid credentials');
+      }
+
+      const data: LoginResponse = await response.json();
+      login(data.token);
+    } catch (err) {
+      setError('Failed to login. Please check your credentials.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <CssBaseline enableColorScheme />
+      <SignInContainer direction="column" justifyContent="space-between">
+        <Card variant="outlined">
+          <Typography
+            component="h1"
+            variant="h4"
+            sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)'}}
+          >
+            Sign in
+          </Typography>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100%',
+              gap: 2,
+            }}
+          >
+            {error && (
+              <Typography color="error" variant="body2">
+                {error}
+              </Typography>
+            )}
+            <FormControl>
+              <FormLabel htmlFor="email">Email</FormLabel>
+              <TextField
+                type="email"
+                name="email"
+                placeholder="your@email.com"
+                autoComplete="email"
+                autoFocus
+                required
+                fullWidth
+                variant="outlined"
+                size="small"
+                sx={{mt: 1}}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="password">Password</FormLabel>
+              <TextField
+                name="password"
+                placeholder="••••••"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                required
+                fullWidth
+                variant="outlined"
+                size="small"
+                sx={{mt: 1}}
+              />
+            </FormControl>
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary"/>}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              disabled={loading}
+            >
+              {loading ? 'Signing in...' : 'Sign in'}
+            </Button>
+            <Link
+              component="button"
+              type="button"
+              onClick={() => {
+              }}
+              variant="body2"
+              sx={{alignSelf: 'center'}}
+            >
+              Forgot your password?
+            </Link>
+          </Box>
+        </Card>
+      </SignInContainer>
+    </>
+  );
 }

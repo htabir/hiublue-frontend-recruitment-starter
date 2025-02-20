@@ -1,10 +1,14 @@
+import ProtectedRoute from '@/auth/protected-route';
 import DashboardView from "@/sections/dashboard/views/dashboard-view";
 
 export const metadata = {
-    title: 'Dashbord',
+    title: 'Dashboard',
 };
 
-
 export default function Page() {
-    return <DashboardView/>;
+    return (
+        <ProtectedRoute>
+            <DashboardView />
+        </ProtectedRoute>
+    );
 }
