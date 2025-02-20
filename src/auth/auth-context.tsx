@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  isLoading: boolean;
+  isInitialized: boolean;
   login: (token: string) => void;
   logout: () => void;
 }
@@ -15,7 +15,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isInitialized, setIsInitialized] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -24,20 +24,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const token = localStorage.getItem('authToken');
         if (token) {
           setIsAuthenticated(true);
-          // If user is on login page and they're authenticated, redirect to dashboard
-          if (window.location.pathname === '/login') {
-            router.push('/');
-          }
-        } else {
-          // If no token and not on login page, redirect to login
-          if (window.location.pathname !== '/login') {
-            router.push('/login');
-          }
+        } else if (window.location.pathname !== '/login') {
+          router.push('/login');
         }
       } catch (error) {
         console.error('Error checking authentication:', error);
       } finally {
-        setIsLoading(false);
+        setIsInitialized(true);
       }
     };
 
@@ -64,8 +57,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  if (!isInitialized) {
+    return null;
+  }
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isLoading, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, isInitialized, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

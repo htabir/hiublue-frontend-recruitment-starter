@@ -14,6 +14,8 @@ import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
+import Alert from '@mui/material/Alert';
+import Collapse from '@mui/material/Collapse';
 import MuiCard from '@mui/material/Card';
 import {styled} from '@mui/material/styles';
 
@@ -63,14 +65,19 @@ interface LoginResponse {
   token: string;
 }
 
+interface AlertState {
+  type: 'success' | 'error';
+  message: string;
+}
+
 export default function SignIn() {
   const { login } = useAuth();
-  const [error, setError] = useState('');
+  const [alert, setAlert] = useState<AlertState | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setError('');
+    setAlert(null);
     setLoading(true);
 
     const formData = new FormData(event.currentTarget);
@@ -91,9 +98,16 @@ export default function SignIn() {
       }
 
       const data: LoginResponse = await response.json();
+      setAlert({
+        type: 'success',
+        message: 'Login successful! Redirecting...',
+      });
       login(data.token);
     } catch (err) {
-      setError('Failed to login. Please check your credentials.');
+      setAlert({
+        type: 'error',
+        message: 'Failed to login. Please check your credentials.',
+      });
     } finally {
       setLoading(false);
     }
@@ -122,11 +136,17 @@ export default function SignIn() {
               gap: 2,
             }}
           >
-            {error && (
-              <Typography color="error" variant="body2">
-                {error}
-              </Typography>
-            )}
+            <Collapse in={!!alert}>
+              {alert && (
+                <Alert
+                  severity={alert.type}
+                  onClose={() => setAlert(null)}
+                  sx={{ mb: 2 }}
+                >
+                  {alert.message}
+                </Alert>
+              )}
+            </Collapse>
             <FormControl>
               <FormLabel htmlFor="email">Email</FormLabel>
               <TextField
