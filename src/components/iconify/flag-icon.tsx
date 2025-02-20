@@ -5,7 +5,6 @@ import type { SxProps, Theme } from '@mui/material/styles';
 import { forwardRef } from 'react';
 import { iconifyClasses } from './classes';
 
-
 // ----------------------------------------------------------------------
 
 export type FlagIconProps = BoxProps & {
@@ -52,5 +51,7 @@ export const FlagIcon = forwardRef<HTMLSpanElement, FlagIconProps>(
         />
       </Box>
     );
-  }
+  },
 );
+
+FlagIcon.displayName = 'FlagIcon';
