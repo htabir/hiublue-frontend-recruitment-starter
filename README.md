@@ -1,103 +1,87 @@
-## **Overview**
+# Hiublue Frontend Recruitment
 
-First of all, congratulations on being shortlisted for the Frontend Developer position at hiublue! 🎉 As part of the selection process, we have designed a challenge to assess your skills in **Next.js, TypeScript, MUI, API handling, code structure and frontend architecture**.
+![Next.js](https://img.shields.io/badge/Next.js-15.0.0-blue)
+![React](https://img.shields.io/badge/React-19.0.0-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-Latest-blue)
 
-You will be provided with a **starter repository** that includes the basic project setup. Your task is to build a functional admin portal with authentication, data visualization on dashboard, basic onboarding offer functionality while integrating API.
+## Overview
 
-We are providing:
+This is a frontend recruitment project for Hiublue, built using Next.js and React. It incorporates Material UI, React Hook Form, and other modern web development tools.
 
-- [**Figma design link**](https://www.figma.com/design/p4aO5zxiLUkws5DDTTWP92/Untitled?node-id=0-1&t=oePPLG5LIUguMtQy-1)
-- [**Postman collection**](https://documenter.getpostman.com/view/8605001/2sAYXFiHWQ)
+## Features
 
-## **Tech Stack**
+- Built with **Next.js 15** and **React 19**
+- UI components powered by **Material UI**
+- Form handling with **React Hook Form** and validation via **Yup**
+- Charts and data visualization using **ApexCharts**
+- State management with **Lodash** and **Day.js** for date handling
 
-- **Framework:** Next.js 14 (App Router)
-- **Language:** TypeScript
-- **UI Library:** Material UI (MUI)
-- **Form Handling:** React Hook Form (Use validation like yup or zod)
-- **Charting:** ApexCharts
-- **State Management:** Context API and LocalStorage
-- **Version Control:** GitHub (Fork the repo and maintain clean commits)
-- **Deployment:** Vercel
+## Prerequisites
 
-## **Requirements**
+Ensure you have the following installed:
 
-### **1. Authentication**
+- [Node.js](https://nodejs.org/) (Recommended: v18+)
+- [pnpm](https://pnpm.io/) (Package Manager)
 
-- A login page will be already there, you have to implement the api first.
-- Store authentication state using **Context API and LocalStorage**.
-- Make sure no unauthorized user has access to the dashboard or any other routes.
-- Show different layouts for **authenticated vs. non-authenticated users**.
+## Environment Variables
 
-### **2. Admin Dashboard**
+Create a `.env.local` file in the root directory and add the following:
 
-- Fetch **real-time data** from the provided API.
-- Display the data in an table with:
-  - Pagination
-  - Searching
-  - Filtering
-- Show **charts** based on API data using **ApexCharts**.
-
-### **3. Sending Onboarding Offer**
-
-- Implement a **separate page** where the admin can send onboarding offers to new users.
-- Allow the admin to **select a user** from a list and fill in additional fields. Do use Mui Autocomplete component. Instead of pulling all users, perform searching using api.
-- Using **React Hook Form** is preferred but not mandatory.
-- Validate the data before submitting using packages like yup and zod.
-
-### **4. Git & Code Structure**
-
-- Follow a **clean Git workflow** (feature branches, meaningful commit messages).
-- Write **modular, reusable, and well-structured** code.
-- Ensure **proper TypeScript typings** throughout the project.
-
-### **5. Responsive design**
-
-- The application should be responsive, adapting seamlessly to different screen sizes without compromising or design integrity.
-
-### **6. Readme File**
-
-- Include a **README** file that provides clear instructions on how to set up, run and test the application
-
-### **7. Deployment**
-
-- **Deploy the project to Vercel** and provide the link.
-
-## **How to Start**
-
-1. **Fork the starter repository** (link will be provided).
-2. Clone your fork and install dependencies:
-
-```bash
-git clone YOUR_FORKED_REPO
-cd YOUR_PROJECT
-npm install
+```env
+NEXT_LIVE_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=https://dummy-1.hiublue.com
 ```
 
-1. Once completed, **push your changes.**
+## Installation
 
-## **Submission Requirements**
+Clone the repository and install dependencies:
 
-- **GitHub Repository Link** (structured with a README file).
-- **Live Deployment Link**
+```sh
+git clone https://github.com/shakil-ahmed-billal/hiublue-frontend-recruitment-starter.git
+cd hiublue-frontend-recruitment
+pnpm install
+```
 
-## **Evaluation Criteria**
+## Running the Application
 
-| **Category** | **Evaluation Criteria** |
-| --- | --- |
-| **Code Quality** | Readability, structure, component-based approach |
-| **TypeScript Usage** | Proper typing of components, hooks, data types, API responses |
-| **API Handling** | Proper usage of necessary caching, error handling |
-| **UI & UX** | Clean UI, responsiveness, MUI usage, adherence to Figma design. Using MUI is a must. |
-| **Authentication** | Token-based authentication, proper auth state management using Context API & LocalStorage |
-| **Table Features** | Proper implementation of pagination, searching using. |
-| **Form Handling** | Correct usage of React Hook Form and proper validation |
-| **Onboarding Offer** | Ability to select users, send onboarding requests |
-| **Error & Success Messages** | Proper display of validation errors and success messages |
-| **Git Practices** | Clean commits, meaningful messages, proper branching |
+To start the development server:
 
-## **Deadline**
+```sh
+pnpm dev
+```
 
-You have **4 days** to complete this challenge.
+To build the application for production:
 
-Good luck!
+```sh
+pnpm build
+```
+
+To start the production server:
+
+```sh
+pnpm start
+```
+
+## Linting
+
+Run ESLint to check for code quality:
+
+```sh
+pnpm lint
+```
+
+## Testing
+
+Currently, this project does not include tests, but you can set up Jest or Cypress as needed.
+
+## Contribution
+
+1. Fork the repository
+2. Create a new branch (`feature/your-feature`)
+3. Commit your changes
+4. Push to your branch and create a PR
+
+## License
+
+This project is private and not licensed for public use.
+

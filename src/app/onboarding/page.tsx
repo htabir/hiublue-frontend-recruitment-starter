@@ -1,10 +1,14 @@
+import Sidebar from "@/components/sidebar/Sidebar";
 import OnboardingView from "@/sections/onboarding/views/onboarding-view";
 
 export const metadata = {
-    title: 'Onboarding',
+  title: "Onboarding",
 };
 
-
 export default function Page() {
-    return <OnboardingView/>;
+  return (
+    <Sidebar>
+      <OnboardingView />
+    </Sidebar>
+  );
 }
